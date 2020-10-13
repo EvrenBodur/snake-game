@@ -1,5 +1,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const score = document.querySelector(".score");
 canvas.width = 400;
 canvas.height = 400;
 const grid = 20;
@@ -34,6 +35,7 @@ class Snake {
     this.speedX = grid;
     this.speedY = 0;
     this.tailNumber = 0;
+    this.score = 0;
     this.tail = [];
   }
   drawSnake = () => {
@@ -86,8 +88,23 @@ class Snake {
   };
 
   eatFood = (food) => {
-    if (this.x === food.x && this.y === food.y) return true;
+    if (this.x === food.x && this.y === food.y) {
+      this.score += 10;
+      score.innerText = this.score;
+      return true;
+    }
     return false;
+  };
+
+  collision = () => {
+    for (let tail of this.tail) {
+      if (this.x === tail.x && this.y === tail.y) {
+        this.tailNumber = 0;
+        this.tail = [];
+        this.score = 0;
+        score.innerText = this.score;
+      }
+    }
   };
 }
 
@@ -117,7 +134,7 @@ function init() {
 
   food.randomLocation();
 
-  setInterval(() => {
+  const interval = setInterval(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     board.drawBoard();
     food.drawFood();
@@ -128,6 +145,8 @@ function init() {
       food.randomLocation();
       snake.addTail();
     }
+
+    snake.collision();
   }, 200);
 }
 
