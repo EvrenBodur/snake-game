@@ -134,7 +134,7 @@ function init() {
 
   food.randomLocation();
 
-  const interval = setInterval(() => {
+  setInterval(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     board.drawBoard();
     food.drawFood();
